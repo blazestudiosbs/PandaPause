@@ -25,5 +25,17 @@ namespace PandaPause.Core
                     return $"{pandaName} is here. How are you feeling today?";
             }
         }
+        public static string GetFollowUp(string pandaName, string lastMood, string lastEntry)
+{
+    if (string.IsNullOrWhiteSpace(pandaName))
+        pandaName = "Your panda";
+
+    if (!string.IsNullOrWhiteSpace(lastEntry))
+    {
+        return $"Sara remembers:\n\"{lastEntry}\"\n\nHow did that go today?";
+    }
+
+    return GetFollowUp(pandaName, lastMood);
+}
     }
 }

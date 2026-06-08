@@ -14,29 +14,48 @@ namespace PandaPause.UI
             Refresh();
         }
 
-       public void Refresh()
-{
-    if (PandaAppController.Instance == null) return;
+        public void Refresh()
+        {
+            if (greetingText == null || pandaPromptText == null)
+            {
+                Debug.LogError("HomeScreenUI is missing text references.");
+                return;
+            }
 
-    var profile = PandaAppController.Instance.CurrentProfile;
+            if (PandaAppController.Instance == null || PandaAppController.Instance.CurrentProfile == null)
+            {
+                greetingText.text = "Hi, Friend.";
+                pandaPromptText.text = "Your panda is here. How are you feeling today?";
+                return;
+            }
 
-    string userName = string.IsNullOrWhiteSpace(profile.userName) ? "Friend" : profile.userName;
-    string pandaName = string.IsNullOrWhiteSpace(profile.pandaName) ? "Maple" : profile.pandaName;
+            var profile = PandaAppController.Instance.CurrentProfile;
 
-    greetingText.text = $"Hi, {userName}.";
+            string userName = string.IsNullOrWhiteSpace(profile.userName)
+                ? "Friend"
+                : profile.userName;
 
-    JournalDatabase database = JournalSaveSystem.LoadDatabase();
+            string pandaName = string.IsNullOrWhiteSpace(profile.pandaName)
+                ? "Maple"
+                : profile.pandaName;
 
-    if (database.entries != null && database.entries.Count > 0)
-    {
-        string latestMood = database.entries[database.entries.Count - 1].mood;
+            greetingText.text = $"Hi, {userName}.";
 
-        pandaPromptText.text = PandaFollowUpGenerator.GetFollowUp(pandaName, latestMood);
-    }
-    else
-    {
-        pandaPromptText.text = $"{pandaName} is here. How are you feeling today?";
-    }
-}
+            JournalDatabase database = JournalSaveSystem.LoadDatabase();
+
+            if (database.entries == null || database.entries.Count == 0)
+            {
+                pandaPromptText.text = $"{pandaName} is here. How are you feeling today?";
+                return;
+            }
+
+            JournalEntry latest = database.entries[database.entries.Count - 1];
+
+            pandaPromptText.text = PandaFollowUpGenerator.GetFollowUp(
+                pandaName,
+                latest.mood,
+                latest.entryText
+            );
+        }
     }
 }

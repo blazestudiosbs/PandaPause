@@ -17,6 +17,7 @@ namespace PandaPause.UI
 
         
         {
+            Debug.Log("LatestMemoryUI Refresh called.");
 string pandaName = "Your panda";
 
 if (PandaAppController.Instance != null &&
@@ -33,6 +34,7 @@ if (PandaAppController.Instance != null &&
             }
 
             JournalDatabase database = JournalSaveSystem.LoadDatabase();
+            Debug.Log($"LatestMemoryUI entries count: {(database.entries == null ? -1 : database.entries.Count)}");
 
             if (database.entries == null || database.entries.Count == 0)
             {
@@ -41,6 +43,7 @@ if (PandaAppController.Instance != null &&
             }
 
             JournalEntry latest = database.entries[database.entries.Count - 1];
+            Debug.Log($"LatestMemoryUI latest entryText: '{latest.entryText}'");
 
             string memory = string.IsNullOrWhiteSpace(latest.entryText)
                 ? "something important"

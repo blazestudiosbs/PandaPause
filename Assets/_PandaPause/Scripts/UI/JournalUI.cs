@@ -9,6 +9,8 @@ namespace PandaPause.UI
     {
         [SerializeField] private InputField journalInput;
         [SerializeField] private Text responseText;
+        [SerializeField] private LatestMemoryUI latestMemoryUI;
+        [SerializeField] private HomeScreenUI homeScreenUI;
 
         private string currentMood = "Unselected";
 
@@ -26,6 +28,7 @@ namespace PandaPause.UI
             }
 
             string entryText = journalInput.text.Trim();
+            Debug.Log($"JournalUI saving entryText: '{entryText}'");
 
             if (string.IsNullOrWhiteSpace(entryText))
             {
@@ -45,6 +48,15 @@ namespace PandaPause.UI
 
             database.entries.Add(entry);
             JournalSaveSystem.SaveDatabase(database);
+            if (latestMemoryUI != null)
+{
+    latestMemoryUI.Refresh();
+}
+if (homeScreenUI != null)
+{
+    homeScreenUI.Refresh();
+}
+            Debug.Log($"JournalUI saved entries count: {database.entries.Count}");
 
             journalInput.text = "";
             responseText.text = "Thank you for sharing that. Your panda tucked it safely away.";
