@@ -3,8 +3,16 @@ using UnityEngine;
 
 namespace PandaPause.Core
 {
+    
     public static class JournalSaveSystem
     {
+        public static void DeleteDatabase()
+{
+    if (File.Exists(SavePath))
+    {
+        File.Delete(SavePath);
+    }
+}
         private static readonly string SavePath =
             Path.Combine(Application.persistentDataPath, "journal.json");
 

@@ -31,28 +31,7 @@ namespace PandaPause.UI
     {
         string latestMood = database.entries[database.entries.Count - 1].mood;
 
-        switch (latestMood)
-        {
-            case "Great":
-                pandaPromptText.text = $"{pandaName} remembers you had a good day yesterday. How are you feeling today?";
-                break;
-
-            case "Okay":
-                pandaPromptText.text = $"{pandaName} remembers yesterday was okay. How are you feeling today?";
-                break;
-
-            case "Rough":
-                pandaPromptText.text = $"{pandaName} remembers yesterday was rough. How are you feeling today?";
-                break;
-
-            case "Exhausted":
-                pandaPromptText.text = $"{pandaName} remembers you were exhausted yesterday. How are you feeling today?";
-                break;
-
-            default:
-                pandaPromptText.text = $"{pandaName} is here. How are you feeling today?";
-                break;
-        }
+        pandaPromptText.text = PandaFollowUpGenerator.GetFollowUp(pandaName, latestMood);
     }
     else
     {
