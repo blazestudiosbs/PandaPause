@@ -2,6 +2,8 @@ using UnityEngine;
 
 namespace PandaPause.Core
 {
+
+    
     public class PandaAppController : MonoBehaviour
     {
         public static PandaAppController Instance { get; private set; }
@@ -17,7 +19,8 @@ namespace PandaPause.Core
             }
 
             Instance = this;
-            CurrentProfile = PandaSaveSystem.LoadProfile();
+            PandaSaveSystem.DeleteProfile();
+CurrentProfile = PandaSaveSystem.LoadProfile();
         }
 
         public void CompleteSetup(string userName, string pandaName)

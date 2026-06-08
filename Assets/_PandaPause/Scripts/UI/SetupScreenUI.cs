@@ -14,8 +14,26 @@ namespace PandaPause.UI
         [SerializeField] private GameObject homeScreen;
         [SerializeField] private HomeScreenUI homeScreenUI;
 
+        private void Awake()
+        {
+            AutoWireIfMissing();
+        }
+
         private void Start()
         {
+            if (continueButton == null)
+            {
+                Debug.LogError("SetupScreenUI: ContinueButton is missing.");
+                return;
+            }
+
+            if (PandaAppController.Instance == null)
+            {
+                Debug.LogError("SetupScreenUI: PandaAppController is missing.");
+                return;
+            }
+
+            continueButton.onClick.RemoveListener(HandleContinue);
             continueButton.onClick.AddListener(HandleContinue);
 
             if (PandaAppController.Instance.CurrentProfile.hasCompletedSetup)
@@ -24,10 +42,56 @@ namespace PandaPause.UI
                 ShowSetup();
         }
 
+        private void AutoWireIfMissing()
+        {
+            if (setupScreen == null)
+                setupScreen = gameObject;
+
+            if (homeScreen == null)
+            {
+                Transform found = transform.parent != null
+                    ? transform.parent.Find("HomeScreen")
+                    : null;
+
+                if (found != null)
+                    homeScreen = found.gameObject;
+            }
+
+            if (userNameInput == null)
+            {
+                Transform found = transform.Find("UserNameInput");
+                if (found != null)
+                    userNameInput = found.GetComponent<InputField>();
+            }
+
+            if (pandaNameInput == null)
+            {
+                Transform found = transform.Find("PandaNameInput");
+                if (found != null)
+                    pandaNameInput = found.GetComponent<InputField>();
+            }
+
+            if (continueButton == null)
+            {
+                Transform found = transform.Find("ContinueButton");
+                if (found != null)
+                    continueButton = found.GetComponent<Button>();
+            }
+
+            if (homeScreenUI == null && homeScreen != null)
+                homeScreenUI = homeScreen.GetComponent<HomeScreenUI>();
+        }
+
         private void HandleContinue()
         {
-            string userName = string.IsNullOrWhiteSpace(userNameInput.text) ? "Friend" : userNameInput.text.Trim();
-            string pandaName = string.IsNullOrWhiteSpace(pandaNameInput.text) ? "Maple" : pandaNameInput.text.Trim();
+            string userName = userNameInput != null ? userNameInput.text.Trim() : "";
+            string pandaName = pandaNameInput != null ? pandaNameInput.text.Trim() : "";
+
+            if (string.IsNullOrWhiteSpace(userName))
+                userName = "Friend";
+
+            if (string.IsNullOrWhiteSpace(pandaName))
+                pandaName = "Maple";
 
             PandaAppController.Instance.CompleteSetup(userName, pandaName);
             ShowHome();
@@ -35,15 +99,23 @@ namespace PandaPause.UI
 
         private void ShowSetup()
         {
-            setupScreen.SetActive(true);
-            homeScreen.SetActive(false);
+            if (setupScreen != null)
+                setupScreen.SetActive(true);
+
+            if (homeScreen != null)
+                homeScreen.SetActive(false);
         }
 
         private void ShowHome()
         {
-            setupScreen.SetActive(false);
-            homeScreen.SetActive(true);
-            homeScreenUI.Refresh();
+            if (setupScreen != null)
+                setupScreen.SetActive(false);
+
+            if (homeScreen != null)
+                homeScreen.SetActive(true);
+
+            if (homeScreenUI != null)
+                homeScreenUI.Refresh();
         }
     }
 }
