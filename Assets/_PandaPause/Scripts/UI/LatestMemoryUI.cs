@@ -14,7 +14,18 @@ namespace PandaPause.UI
         }
 
         public void Refresh()
+
+        
         {
+string pandaName = "Your panda";
+
+if (PandaAppController.Instance != null &&
+    PandaAppController.Instance.CurrentProfile != null &&
+    !string.IsNullOrWhiteSpace(PandaAppController.Instance.CurrentProfile.pandaName))
+{
+    pandaName = PandaAppController.Instance.CurrentProfile.pandaName;
+}
+
             if (latestMemoryText == null)
             {
                 Debug.LogError("LatestMemoryUI is missing LatestMemoryText reference.");
@@ -35,7 +46,7 @@ namespace PandaPause.UI
                 ? "something important"
                 : latest.entryText;
 
-            latestMemoryText.text = $"Your panda remembers:\n\"{memory}\"";
+            latestMemoryText.text = $"{pandaName} remembers:\n\"{memory}\"";
         }
     }
 }
