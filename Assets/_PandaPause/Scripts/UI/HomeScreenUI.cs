@@ -22,12 +22,17 @@ namespace PandaPause.UI
                 return;
             }
 
-            if (PandaAppController.Instance == null || PandaAppController.Instance.CurrentProfile == null)
-            {
-                greetingText.text = "Hi, Friend.";
-                pandaPromptText.text = "Your panda is here. How are you feeling today?";
-                return;
-            }
+            PandaProfile savedProfile = PandaSaveSystem.LoadProfile();
+
+if (PandaAppController.Instance == null || PandaAppController.Instance.CurrentProfile == null)
+{
+    string savedUserName = string.IsNullOrWhiteSpace(savedProfile.userName) ? "Friend" : savedProfile.userName;
+    string savedPandaName = string.IsNullOrWhiteSpace(savedProfile.pandaName) ? "Your panda" : savedProfile.pandaName;
+
+    greetingText.text = $"Hi, {savedUserName}.";
+    pandaPromptText.text = $"{savedPandaName} is here. How are you feeling today?";
+    return;
+}
 
             var profile = PandaAppController.Instance.CurrentProfile;
 
@@ -36,7 +41,7 @@ namespace PandaPause.UI
                 : profile.userName;
 
             string pandaName = string.IsNullOrWhiteSpace(profile.pandaName)
-                ? "Maple"
+                ? "Your panda"
                 : profile.pandaName;
 
             greetingText.text = $"Hi, {userName}.";

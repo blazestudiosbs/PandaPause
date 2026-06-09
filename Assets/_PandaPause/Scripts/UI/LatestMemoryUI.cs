@@ -20,11 +20,12 @@ namespace PandaPause.UI
             Debug.Log("LatestMemoryUI Refresh called.");
 string pandaName = "Your panda";
 
-if (PandaAppController.Instance != null &&
-    PandaAppController.Instance.CurrentProfile != null &&
-    !string.IsNullOrWhiteSpace(PandaAppController.Instance.CurrentProfile.pandaName))
+var profile = PandaSaveSystem.LoadProfile();
+
+if (profile != null &&
+    !string.IsNullOrWhiteSpace(profile.pandaName))
 {
-    pandaName = PandaAppController.Instance.CurrentProfile.pandaName;
+    pandaName = profile.pandaName;
 }
 
             if (latestMemoryText == null)

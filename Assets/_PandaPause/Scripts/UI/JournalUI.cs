@@ -38,11 +38,19 @@ namespace PandaPause.UI
 
     JournalDatabase database = JournalSaveSystem.LoadDatabase();
 
-    string pandaResponse = PandaResponseGenerator.GetJournalResponse(
-        pandaName,
-        currentMood,
-        entryText
-    );
+string previousMemory = "";
+
+if (database.entries != null && database.entries.Count > 0)
+{
+    previousMemory = database.entries[database.entries.Count - 1].entryText;
+}
+
+string pandaResponse = PandaResponseGenerator.GetJournalResponse(
+    pandaName,
+    currentMood,
+    entryText,
+    previousMemory
+);
 
     JournalEntry entry = new JournalEntry
     {
