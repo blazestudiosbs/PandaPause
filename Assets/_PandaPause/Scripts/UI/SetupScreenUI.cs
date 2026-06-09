@@ -91,7 +91,7 @@ namespace PandaPause.UI
                 userName = "Friend";
 
             if (string.IsNullOrWhiteSpace(pandaName))
-                pandaName = "Maple";
+                pandaName = "Your panda";
 
             PandaAppController.Instance.CompleteSetup(userName, pandaName);
             ShowHome();

@@ -23,7 +23,7 @@ namespace PandaPause.UI
 
             if (database.entries == null || database.entries.Count == 0)
             {
-                memoryText.text = "Sara has no memories yet.";
+                memoryText.text ="Your panda has no memories yet.";
                 return;
             }
 
