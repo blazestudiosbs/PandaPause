@@ -38,8 +38,7 @@ if (PandaAppController.Instance != null &&
 
             if (database.entries == null || database.entries.Count == 0)
             {
-                latestMemoryText.text = "Your panda is ready to remember.";
-                return;
+latestMemoryText.text = $"{pandaName} is ready to remember.";                return;
             }
 
             JournalEntry latest = database.entries[database.entries.Count - 1];
@@ -49,7 +48,27 @@ if (PandaAppController.Instance != null &&
                 ? "something important"
                 : latest.entryText;
 
-            latestMemoryText.text = $"{pandaName} remembers:\n\"{memory}\"";
+latestMemoryText.text =
+    $"{pandaName} remembers {GetMemoryAge(latest.dateUtc)}:\n\"{memory}\"";
+        }
+
+        private string GetMemoryAge(string dateUtc)
+        {
+            if (!System.DateTime.TryParse(dateUtc, out System.DateTime parsedDate))
+                return "";
+
+            System.DateTime memoryDate = parsedDate.ToLocalTime().Date;
+            System.DateTime today = System.DateTime.Now.Date;
+
+            int daysAgo = (today - memoryDate).Days;
+
+            if (daysAgo <= 0)
+                return "from today";
+
+            if (daysAgo == 1)
+                return "from yesterday";
+
+            return $"from {daysAgo} days ago";
         }
     }
 }

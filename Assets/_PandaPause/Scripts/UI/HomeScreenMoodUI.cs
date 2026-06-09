@@ -9,13 +9,19 @@ namespace PandaPause.UI
         [SerializeField] private Text responseText;
 
         private string PandaName
+{
+    get
+    {
+        if (PandaAppController.Instance == null ||
+            PandaAppController.Instance.CurrentProfile == null ||
+            string.IsNullOrWhiteSpace(PandaAppController.Instance.CurrentProfile.pandaName))
         {
-            get
-            {
-                var profile = PandaAppController.Instance.CurrentProfile;
-                return string.IsNullOrWhiteSpace(profile.pandaName) ? "Maple" : profile.pandaName;
-            }
+            return "Your panda";
         }
+
+        return PandaAppController.Instance.CurrentProfile.pandaName;
+    }
+}
 
         public void SelectGreat()
         {

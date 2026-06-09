@@ -25,17 +25,46 @@ namespace PandaPause.Core
                     return $"{pandaName} is here. How are you feeling today?";
             }
         }
+
         public static string GetFollowUp(string pandaName, string lastMood, string lastEntry)
-{
-    if (string.IsNullOrWhiteSpace(pandaName))
-        pandaName = "Your panda";
+        {
+            if (string.IsNullOrWhiteSpace(pandaName))
+                pandaName = "Your panda";
 
-    if (!string.IsNullOrWhiteSpace(lastEntry))
-    {
-        return $"Sara remembers:\n\"{lastEntry}\"\n\nHow did that go today?";
-    }
+            if (!string.IsNullOrWhiteSpace(lastEntry))
+            {
+                string lowerEntry = lastEntry.ToLowerInvariant();
 
-    return GetFollowUp(pandaName, lastMood);
-}
+                if (ContainsAny(lowerEntry, "work", "job", "boss", "meeting", "office", "coworker", "coworkers"))
+                    return "How did work go today?";
+
+                if (ContainsAny(lowerEntry, "family", "wife", "husband", "daughter", "son", "kids", "children", "child"))
+                    return "How is your family doing today?";
+
+                if (ContainsAny(lowerEntry, "tired", "exhausted", "sleep", "rest", "rested"))
+                    return "Did you get a chance to rest?";
+
+                if (ContainsAny(lowerEntry, "school", "class", "teacher", "homework", "college"))
+                    return "How did school go today?";
+
+                if (ContainsAny(lowerEntry, "success", "finished", "completed", "done", "accomplished"))
+                    return "How did that progress today?";
+
+                return "How did that go today?";
+            }
+
+            return GetFollowUp(pandaName, lastMood);
+        }
+
+        private static bool ContainsAny(string source, params string[] keywords)
+        {
+            foreach (string keyword in keywords)
+            {
+                if (source.Contains(keyword))
+                    return true;
+            }
+
+            return false;
+        }
     }
 }

@@ -45,11 +45,13 @@ namespace PandaPause.UI
 
             if (database.entries == null || database.entries.Count == 0)
             {
+                
                 pandaPromptText.text = $"{pandaName} is here. How are you feeling today?";
                 return;
             }
 
             JournalEntry latest = database.entries[database.entries.Count - 1];
+            Debug.Log($"Prompt generated: '{pandaPromptText.text}'");
 
             pandaPromptText.text = PandaFollowUpGenerator.GetFollowUp(
                 pandaName,

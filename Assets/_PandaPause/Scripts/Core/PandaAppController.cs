@@ -19,8 +19,7 @@ namespace PandaPause.Core
             }
 
             Instance = this;
-            PandaSaveSystem.DeleteProfile();
-CurrentProfile = PandaSaveSystem.LoadProfile();
+            CurrentProfile = PandaSaveSystem.LoadProfile();
         }
 
         public void CompleteSetup(string userName, string pandaName)

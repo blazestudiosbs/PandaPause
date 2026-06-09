@@ -19,47 +19,62 @@ namespace PandaPause.UI
             currentMood = mood;
         }
 
-        public void SaveEntry()
-        {
-            if (journalInput == null || responseText == null)
-            {
-                Debug.LogError("JournalUI is missing references.");
-                return;
-            }
-
-            string entryText = journalInput.text.Trim();
-            Debug.Log($"JournalUI saving entryText: '{entryText}'");
-
-            if (string.IsNullOrWhiteSpace(entryText))
-            {
-                responseText.text = "Write a little something first. Your panda is listening.";
-                return;
-            }
-
-            JournalDatabase database = JournalSaveSystem.LoadDatabase();
-
-            JournalEntry entry = new JournalEntry
-            {
-                dateUtc = DateTime.UtcNow.ToString("o"),
-                mood = currentMood,
-                entryText = entryText,
-                pandaResponse = responseText.text
-            };
-
-            database.entries.Add(entry);
-            JournalSaveSystem.SaveDatabase(database);
-            if (latestMemoryUI != null)
+       public void SaveEntry()
 {
-    latestMemoryUI.Refresh();
-}
-if (homeScreenUI != null)
-{
-    homeScreenUI.Refresh();
-}
-            Debug.Log($"JournalUI saved entries count: {database.entries.Count}");
+    if (journalInput == null || responseText == null)
+    {
+        Debug.LogError("JournalUI is missing references.");
+        return;
+    }
 
-            journalInput.text = "";
-            responseText.text = "Thank you for sharing that. Your panda tucked it safely away.";
-        }
+    string entryText = journalInput.text.Trim();
+    string pandaName = GetPandaName();
+
+    if (string.IsNullOrWhiteSpace(entryText))
+    {
+        responseText.text = $"{pandaName} is listening. Write a little something first.";
+        return;
+    }
+
+    JournalDatabase database = JournalSaveSystem.LoadDatabase();
+
+    string pandaResponse = PandaResponseGenerator.GetJournalResponse(
+        pandaName,
+        currentMood,
+        entryText
+    );
+
+    JournalEntry entry = new JournalEntry
+    {
+        dateUtc = DateTime.UtcNow.ToString("o"),
+        mood = currentMood,
+        entryText = entryText,
+        pandaResponse = pandaResponse
+    };
+
+    database.entries.Add(entry);
+    JournalSaveSystem.SaveDatabase(database);
+
+    journalInput.text = "";
+    responseText.text = pandaResponse;
+
+    if (latestMemoryUI != null)
+        latestMemoryUI.Refresh();
+
+    if (homeScreenUI != null)
+        homeScreenUI.Refresh();
+}
+
+private string GetPandaName()
+{
+    if (PandaAppController.Instance != null &&
+        PandaAppController.Instance.CurrentProfile != null &&
+        !string.IsNullOrWhiteSpace(PandaAppController.Instance.CurrentProfile.pandaName))
+    {
+        return PandaAppController.Instance.CurrentProfile.pandaName;
+    }
+
+    return "Your panda";
+}
     }
 }
