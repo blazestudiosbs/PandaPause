@@ -1,3 +1,4 @@
+using UnityEngine;
 namespace PandaPause.Core
 {
     public static class PandaResponseGenerator
@@ -23,21 +24,29 @@ namespace PandaPause.Core
             switch (mood)
             {
                 case "Great":
-                    return memoryPrefix + $"That's wonderful to hear. {pandaName} is glad something good happened today.";
+    return GetRandomResponse(PandaResponseLibrary.GreatResponses);
 
-                case "Okay":
-                    return memoryPrefix + $"I'm glad you're doing okay. {pandaName} will be here if you want to share more.";
+case "Okay":
+    return GetRandomResponse(PandaResponseLibrary.OkayResponses);
 
-                case "Rough":
-                    return memoryPrefix + $"I'm sorry today felt rough. {pandaName} is here with you.";
+case "Rough":
+    return GetRandomResponse(PandaResponseLibrary.RoughResponses);
 
-                case "Exhausted":
-                    return memoryPrefix + $"That sounds like a lot to carry. {pandaName} hopes you get a little rest.";
+case "Exhausted":
+    return GetRandomResponse(PandaResponseLibrary.ExhaustedResponses);;
 
                 default:
                     return memoryPrefix + $"Thank you for sharing that. {pandaName} tucked it safely away.";
             }
         }
+
+        private static string GetRandomResponse(string[] responses)
+{
+    if (responses == null || responses.Length == 0)
+        return "I'm listening.";
+
+    return responses[Random.Range(0, responses.Length)];
+}
 
         private static string GetMemoryPrefix(string pandaName, string previousMemory, string currentEntry)
         {

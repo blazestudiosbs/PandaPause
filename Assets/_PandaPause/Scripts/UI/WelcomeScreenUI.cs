@@ -17,6 +17,7 @@ namespace PandaPause.UI
             Refresh();
         }
 
+
         public void Refresh()
         {
             if (welcomeTitleText != null)
@@ -25,6 +26,17 @@ namespace PandaPause.UI
             if (latestMemoryUI != null)
                 latestMemoryUI.Refresh();
         }
+
+        public void ReturnToWelcome()
+{
+    if (homeScreen != null)
+        homeScreen.SetActive(false);
+
+    if (welcomeScreen != null)
+        welcomeScreen.SetActive(true);
+
+    Refresh();
+}
 
         public void ContinueToHome()
         {
